@@ -6,27 +6,31 @@ public class AI : MonoBehaviour
 {
     private enum _aiStates
     {
-        Idle,
         Running,
         Hiding,
         Dead
     }
+
+    private bool _hiding = false;
+    private bool _hidingCooldown = true;
+    private bool _deathTrigger = false;
+   
     private _aiStates _states;
     private NavMeshAgent _agent;
     [SerializeField]
     private GameObject _endWaypoint;
     private Animator _anim;
     private GameObject _startWaypoint;
-    private bool _hiding = false;
-    private bool _hidingCooldown = true;
+
     void Start()
     {
-
         _anim = GetComponent<Animator>();
         _endWaypoint = GameObject.FindGameObjectWithTag("Ending Waypoint");
         _startWaypoint = GameObject.FindGameObjectWithTag("Starting Waypoint");
         _states = _aiStates.Running;
         _agent = GetComponent<NavMeshAgent>();
+
+        StartCoroutine(HidingCooldown());
     }
     private void Update()
     {
@@ -34,11 +38,8 @@ public class AI : MonoBehaviour
         switch (_states)
         {
             case _aiStates.Running:
-                if (_hiding == false)
-                {
                     _agent.isStopped = false;
                     _agent.destination = _endWaypoint.transform.position;
-                }
                 break;
             case _aiStates.Hiding:
                 if(_hiding == true)
@@ -47,18 +48,37 @@ public class AI : MonoBehaviour
                 }
                 break;
             case _aiStates.Dead:
-                _agent.isStopped = true;
-                _anim.SetTrigger("Death");
-                this.gameObject.SetActive(false);
+                if(_deathTrigger == true)
+                {
+                    _agent.isStopped = true;
+                    StartCoroutine(Death());
+                    _deathTrigger = false;
+                }
                 break;
         }
+    }
+
+    public void InitiateDeath()
+    {
+        _deathTrigger = true;
+        _states = _aiStates.Dead;
+    }
+
+    private IEnumerator Death()
+    {
+        _anim.SetTrigger("Death");
+        
+        yield return new WaitForSeconds(3.21f);
+        this.transform.position = _endWaypoint.transform.position;
+        this.gameObject.SetActive(false);
+        _states = _aiStates.Running;
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Ending Waypoint")
         {
-            Debug.Log("AI has been reset");
             this.transform.position = _startWaypoint.transform.position;
             this.gameObject.SetActive(false);
         }
@@ -69,33 +89,27 @@ public class AI : MonoBehaviour
             {
                 _hidingCooldown = true;
                 _hiding = true;
-                _agent.destination = other.transform.position;
                 StartCoroutine(Hiding());
-            }
-            else
-            {
-                StartCoroutine(HidingCooldown());
             }
         }
     }
-
     private IEnumerator HidingCooldown()
     {
-        float Cooldown = Random.Range(4f, 20f);
+        int Cooldown = Random.Range(2, 20);
         yield return new WaitForSeconds(Cooldown);
         _hidingCooldown = false;
     }
 
     private IEnumerator Hiding()
     {
-        float randomTime = Random.Range(2.0f,5.0f);
-        yield return new WaitForSeconds(1f);
+        float randomTime = Random.Range(2.0f,3.0f);
+
         _anim.SetTrigger("Hiding");
         _states = _aiStates.Hiding;
         yield return new WaitForSeconds(randomTime);
         _hiding = false;
         _anim.ResetTrigger("Hiding");
-        StartCoroutine(HidingCooldown());
         _states = _aiStates.Running;
+        StartCoroutine(HidingCooldown());  
     }
 }

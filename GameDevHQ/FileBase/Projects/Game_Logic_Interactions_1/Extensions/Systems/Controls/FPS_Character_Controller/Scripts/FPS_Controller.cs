@@ -7,14 +7,20 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
     [RequireComponent(typeof(CharacterController))]
     public class FPS_Controller : MonoBehaviour
     {
+        //Variables I added
+        [SerializeField]
+        private GameObject _sparks;
+        private bool _rifleCooldown = true;
+        private RayCastInput _rayInput;
+
         [Header("Controller Info")]
-        [SerializeField ][Tooltip("How fast can the controller walk?")]
+        [SerializeField] [Tooltip("How fast can the controller walk?")]
         private float _walkSpeed = 3.0f; //how fast the character is walking
-        [SerializeField][Tooltip("How fast can the controller run?")]
+        [SerializeField] [Tooltip("How fast can the controller run?")]
         private float _runSpeed = 7.0f; // how fast the character is running
-        [SerializeField][Tooltip("Set your gravity multiplier")] 
+        [SerializeField] [Tooltip("Set your gravity multiplier")]
         private float _gravity = 1.0f; //how much gravity to apply 
-        [SerializeField][Tooltip("How high can the controller jump?")]
+        [SerializeField] [Tooltip("How high can the controller jump?")]
         private float _jumpHeight = 15.0f; //how high can the character jump
         [SerializeField]
         private bool _isRunning = false; //bool to display if we are running
@@ -23,31 +29,63 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
 
         private CharacterController _controller; //reference variable to the character controller component
         private float _yVelocity = 0.0f; //cache our y velocity
-        
 
-        [Header("Headbob Settings")]       
-        [SerializeField][Tooltip("Smooth out the transition from moving to not moving")]
+
+        [Header("Headbob Settings")]
+        [SerializeField] [Tooltip("Smooth out the transition from moving to not moving")]
         private float _smooth = 20.0f; //smooth out the transition from moving to not moving
-        [SerializeField][Tooltip("How quickly the player head bobs")]
+        [SerializeField] [Tooltip("How quickly the player head bobs")]
         private float _walkFrequency = 4.8f; //how quickly the player head bobs when walking
-        [SerializeField][Tooltip("How quickly the player head bobs")]
+        [SerializeField] [Tooltip("How quickly the player head bobs")]
         private float _runFrequency = 7.8f; //how quickly the player head bobs when running
-        [SerializeField][Tooltip("How dramatic the headbob is")][Range(0.0f, 0.2f)]
+        [SerializeField] [Tooltip("How dramatic the headbob is")] [Range(0.0f, 0.2f)]
         private float _heightOffset = 0.05f; //how dramatic the bobbing is
         private float _timer = Mathf.PI / 2; //This is where Sin = 1 -- used to simulate walking forward. 
         private Vector3 _initialCameraPos; //local position where we reset the camera when it's not bobbing
 
         [Header("Camera Settings")]
-        [SerializeField][Tooltip("Control the look sensitivty of the camera")]
+        [SerializeField] [Tooltip("Control the look sensitivty of the camera")]
         private float _lookSensitivity = 5.0f; //mouse sensitivity 
-
         private Camera _fpsCamera;
+
         private void Start()
         {
+            _rayInput = new RayCastInput();
+            _rayInput.LeftClick.Enable();
+            _rayInput.LeftClick.Shooting.performed += Shooting_performed;
+
+
             _controller = GetComponent<CharacterController>(); //assign the reference variable to the component
             _fpsCamera = GetComponentInChildren<Camera>();
             _initialCameraPos = _fpsCamera.transform.localPosition;
             Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        private void Shooting_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if(_rifleCooldown == true)
+            {
+                RaycastHit _hitInfo;
+                Ray origin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                if (Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 3))
+                {
+                    AI robot = _hitInfo.collider.GetComponent<AI>();
+                    Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
+                    Debug.Log("Hit Robot");
+                    robot.InitiateDeath();
+                }
+                if (Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 6))
+                {
+                    Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
+                    Debug.Log("Hit wall");
+                }
+                StartCoroutine(Reload());
+            }
+
+            if(_rifleCooldown == false)
+            {
+                Debug.Log("Reloading");
+            }
         }
 
         private void Update()
@@ -60,6 +98,14 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
             FPSController();
             CameraController();
             HeadBobbing(); 
+        }
+
+        private IEnumerator Reload()
+        {
+            _rifleCooldown = false;
+            yield return new WaitForSeconds(3.0f);
+            Debug.Log("reloaded");
+            _rifleCooldown = true;
         }
 
         void FPSController()
@@ -176,4 +222,3 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
         }
     }
 }
-

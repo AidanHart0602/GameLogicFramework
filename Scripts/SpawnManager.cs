@@ -64,7 +64,7 @@ public class SpawnManager : MonoBehaviour
         while(_gameActive == true)
         {
             ActivateAI();
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(3f);
         }
     }
 }
