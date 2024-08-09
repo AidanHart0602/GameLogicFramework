@@ -8,55 +8,75 @@ public class SpawnManager : MonoBehaviour
     private Transform _startingPoint;
     [SerializeField]
     public Transform _endingPoint;
- 
+
     [SerializeField]
     private List<GameObject> _aiPool;
     [SerializeField]
     private GameObject _aiPrefab;
     [SerializeField]
     private GameObject _aiContainer;
-    
+
     private bool _gameActive = true;
+
     [SerializeField]
-    private float _enemyLimit = 0;
+    private int _numberofEnemies = 0;
+    [SerializeField]
+    private int _enemyLimit = 15;
+    [SerializeField]
+    private int _spawnedEnemies = 0;
 
     void Start()
     {
-        StoreAI(10);
+        StoreAI(_enemyLimit);
         StartCoroutine(InstantiateAI());
     }
 
-    List<GameObject> StoreAI(int NumofAI) 
+    List<GameObject> StoreAI(int NumofAI)
     {
-        for(int i = 0; i < NumofAI; i++)
+        for (int i = 0; i < NumofAI; i++)
         {
             GameObject NewEnemy = Instantiate(_aiPrefab, _startingPoint.transform.position, Quaternion.identity);
             NewEnemy.transform.parent = _aiContainer.transform;
             NewEnemy.SetActive(false);
             _aiPool.Add(NewEnemy);
-            _enemyLimit++;
+            _numberofEnemies++;
+            UIManager.UIinstance.RemainingBots(_numberofEnemies);
         }
         return _aiPool;
     }
+
+
 
     private void ActivateAI()
     {
         foreach(var enemy in _aiPool)
         {
-            if(enemy.activeInHierarchy == false) 
+            if(enemy.activeInHierarchy == false && _numberofEnemies > 0 && _spawnedEnemies != _enemyLimit) 
             {
                 enemy.SetActive(true);
+                _spawnedEnemies++;
                 return;
             }
         }
-        if(_enemyLimit < 15)
+
+        if(_numberofEnemies == 0) 
         {
-            GameObject NewEnemy = Instantiate(_aiPrefab, _startingPoint.transform.position, Quaternion.identity);
-            NewEnemy.transform.parent = _aiContainer.transform;
-            _enemyLimit++;
-            _aiPool.Add(NewEnemy);
-            return;
+            NextWave();
         }
+    }
+
+    public void LowerNumbers()
+    {
+        _numberofEnemies--;
+        UIManager.UIinstance.RemainingBots(_numberofEnemies);
+    }
+
+    public void NextWave()
+    {
+        _spawnedEnemies = 0;
+        _enemyLimit += 5;
+        StoreAI(_enemyLimit);
+        StartCoroutine(InstantiateAI());
     }
 
     IEnumerator InstantiateAI()

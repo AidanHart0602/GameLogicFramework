@@ -21,11 +21,13 @@ public class AI : MonoBehaviour
     private GameObject _endWaypoint;
     private Animator _anim;
     private GameObject _startWaypoint;
+    private SpawnManager _spawnManager;
 
     void Start()
     {
+        _spawnManager = FindObjectOfType<SpawnManager>();
         _anim = GetComponent<Animator>();
-        _endWaypoint = GameObject.FindGameObjectWithTag("Ending Waypoint");
+        _endWaypoint = GameObject .FindGameObjectWithTag("Ending Waypoint");
         _startWaypoint = GameObject.FindGameObjectWithTag("Starting Waypoint");
         _states = _aiStates.Running;
         _agent = GetComponent<NavMeshAgent>();
@@ -60,6 +62,7 @@ public class AI : MonoBehaviour
 
     public void InitiateDeath()
     {
+        _spawnManager.LowerNumbers();
         _deathTrigger = true;
         _states = _aiStates.Dead;
     }
@@ -103,7 +106,7 @@ public class AI : MonoBehaviour
     private IEnumerator Hiding()
     {
         float randomTime = Random.Range(2.0f,3.0f);
-
+        yield return new WaitForSeconds(0.1f);
         _anim.SetTrigger("Hiding");
         _states = _aiStates.Hiding;
         yield return new WaitForSeconds(randomTime);
