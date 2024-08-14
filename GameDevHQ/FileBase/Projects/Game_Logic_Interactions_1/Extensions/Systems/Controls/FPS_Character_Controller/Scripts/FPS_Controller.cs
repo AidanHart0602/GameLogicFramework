@@ -7,13 +7,21 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
     [RequireComponent(typeof(CharacterController))]
     public class FPS_Controller : MonoBehaviour
     {
+
         //Variables I added
         [SerializeField]
         private GameObject _sparks;
         private bool _rifleCooldown = true;
         private RayCastInput _rayInput;
         private int _score = 0;
-
+        private AudioSource _audioSource;
+        [SerializeField]
+        private AudioClip _reload;
+        [SerializeField]
+        private AudioClip _fire;
+        [SerializeField]
+        private AudioClip _ricochet;
+        private int _quotaVal = 90;
 
         [Header("Controller Info")]
         [SerializeField]
@@ -62,6 +70,12 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
 
         private void Start()
         {
+            _audioSource = GetComponent<AudioSource>();
+            if(_audioSource == null)
+            {
+                Debug.LogError("Audio source for player is null");
+            }
+
             _rayInput = new RayCastInput();
             _rayInput.LeftClick.Enable();
             _rayInput.LeftClick.Shooting.performed += Shooting_performed;
@@ -77,6 +91,9 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
         {
             if (_rifleCooldown == true)
             {
+                _audioSource.clip = _fire;
+                _audioSource.Play();
+
                 RaycastHit _hitInfo;
                 Ray origin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
                 if (Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 3))
@@ -86,13 +103,16 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
                     Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
                     Debug.Log("Hit Robot");
                     UIManager.UIinstance.Score(_score);
+                    _quotaVal--;
+                    UIManager.UIinstance.QuotaCount(_quotaVal);
                     robot.InitiateDeath();
                 }
                 if (Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 6))
                 {
                     Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
                     Debug.Log("Hit Object");
-                    
+                    _audioSource.clip = _ricochet;
+                    _audioSource.Play();
                 }
                 StartCoroutine(Reload());
             }
@@ -118,8 +138,11 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
         private IEnumerator Reload()
         {
             _rifleCooldown = false;
+            yield return new WaitForSeconds(1.0f);
             Debug.Log("Reloading");
-            yield return new WaitForSeconds(3.0f);
+            _audioSource.clip = _reload;
+            _audioSource.Play();
+            yield return new WaitForSeconds(2.0f);
             Debug.Log("reloaded");
             _rifleCooldown = true;
         }

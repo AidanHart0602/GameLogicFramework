@@ -10,11 +10,10 @@ public class AI : MonoBehaviour
         Hiding,
         Dead
     }
-
+    private AudioSource _deathSound;
     private bool _hiding = false;
     private bool _hidingCooldown = true;
     private bool _deathTrigger = false;
-   
     private _aiStates _states;
     private NavMeshAgent _agent;
     [SerializeField]
@@ -25,13 +24,18 @@ public class AI : MonoBehaviour
 
     void Start()
     {
+        _deathSound = GetComponent<AudioSource>();
+        if(_deathSound == null) 
+        {
+            Debug.Log("Audio Source is null");
+        }
+
         _spawnManager = FindObjectOfType<SpawnManager>();
         _anim = GetComponent<Animator>();
         _endWaypoint = GameObject .FindGameObjectWithTag("Ending Waypoint");
         _startWaypoint = GameObject.FindGameObjectWithTag("Starting Waypoint");
         _states = _aiStates.Running;
         _agent = GetComponent<NavMeshAgent>();
-
         StartCoroutine(HidingCooldown());
     }
     private void Update()
@@ -52,6 +56,7 @@ public class AI : MonoBehaviour
             case _aiStates.Dead:
                 if(_deathTrigger == true)
                 {
+                    _deathSound.Play();
                     _agent.isStopped = true;
                     StartCoroutine(Death());
                     _deathTrigger = false;
@@ -70,7 +75,6 @@ public class AI : MonoBehaviour
     private IEnumerator Death()
     {
         _anim.SetTrigger("Death");
-        
         yield return new WaitForSeconds(3.21f);
         this.transform.position = _endWaypoint.transform.position;
         this.gameObject.SetActive(false);
@@ -88,13 +92,19 @@ public class AI : MonoBehaviour
 
         if(other.tag == "Hiding Spot")
         {
-            if(_hidingCooldown == false)
+            gameObject.layer = 7;
+            if (_hidingCooldown == false)
             {
                 _hidingCooldown = true;
                 _hiding = true;
                 StartCoroutine(Hiding());
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        gameObject.layer = 3;
     }
     private IEnumerator HidingCooldown()
     {

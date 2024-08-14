@@ -8,7 +8,6 @@ public class SpawnManager : MonoBehaviour
     private Transform _startingPoint;
     [SerializeField]
     public Transform _endingPoint;
-
     [SerializeField]
     private List<GameObject> _aiPool;
     [SerializeField]
@@ -16,12 +15,12 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _aiContainer;
 
-    private bool _gameActive = true;
+    public bool _gameActive = true;
 
     [SerializeField]
-    private int _numberofEnemies = 0;
+    private int _numberOfEnemies = 0;
     [SerializeField]
-    private int _enemyLimit = 15;
+    private int _enemyLimit;
     [SerializeField]
     private int _spawnedEnemies = 0;
 
@@ -39,44 +38,60 @@ public class SpawnManager : MonoBehaviour
             NewEnemy.transform.parent = _aiContainer.transform;
             NewEnemy.SetActive(false);
             _aiPool.Add(NewEnemy);
-            _numberofEnemies++;
-            UIManager.UIinstance.RemainingBots(_numberofEnemies);
+            _numberOfEnemies++;
+            UIManager.UIinstance.RemainingBots(_numberOfEnemies);
         }
         return _aiPool;
     }
 
+    void CreateWave(int NumofAI)
+    {
+        for(int i = 0; i < NumofAI; i++)
+        {
+            UIManager.UIinstance.RemainingBots(_numberOfEnemies);
+        }
+    }
 
 
     private void ActivateAI()
     {
         foreach(var enemy in _aiPool)
         {
-            if(enemy.activeInHierarchy == false && _numberofEnemies > 0 && _spawnedEnemies != _enemyLimit) 
+            if(enemy.activeInHierarchy == false && _numberOfEnemies > 0 && _spawnedEnemies < _enemyLimit) 
             {
+                Debug.Log("spawned an enemy");
                 enemy.SetActive(true);
                 _spawnedEnemies++;
                 return;
             }
         }
 
-        if(_numberofEnemies == 0) 
+        if(_numberOfEnemies == 0) 
         {
             NextWave();
         }
     }
-
     public void LowerNumbers()
     {
-        _numberofEnemies--;
-        UIManager.UIinstance.RemainingBots(_numberofEnemies);
+        Debug.Log("Lowering Robot Count");
+        _numberOfEnemies--;
+        UIManager.UIinstance.RemainingBots(_numberOfEnemies);
+    }
+
+    public void EndSpawn()
+    {
+        foreach (var enemy in _aiPool)
+        {
+            Destroy(enemy);
+        }
+        _gameActive = false;
     }
 
     public void NextWave()
     {
         _spawnedEnemies = 0;
         _enemyLimit += 5;
-        StoreAI(_enemyLimit);
-        StartCoroutine(InstantiateAI());
+        CreateWave(_enemyLimit);
     }
 
     IEnumerator InstantiateAI()
