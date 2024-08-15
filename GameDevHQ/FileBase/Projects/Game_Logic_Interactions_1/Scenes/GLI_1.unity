@@ -34558,8 +34558,8 @@ MonoBehaviour:
   _quotaText: {fileID: 1348841387}
   _winningText: {fileID: 883959751}
   _gameOverScoreText: {fileID: 1068044409}
-  _reticle: {fileID: 48605868}
   _gameOverText: {fileID: 1311641269}
+  _reticle: {fileID: 48605868}
   _scoreText: {fileID: 748659178}
   _timerText: {fileID: 970532275}
   _aiCount: {fileID: 484063178}

@@ -14,8 +14,9 @@ public class UIManager : MonoBehaviour
             return _uiInstance;
         }
     }
-    private int _gameOverScore;
+
     private float _timerCount = 300;
+
     [SerializeField]
     private Text _quotaText;
     [SerializeField]
@@ -23,16 +24,19 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _gameOverScoreText;
     [SerializeField]
-    private Image _reticle;
-    [SerializeField]
     private Text _gameOverText;
+    private int _gameOverScore;
+    private bool _quotaMet = false;
+
+    [SerializeField]
+    private Image _reticle;
     [SerializeField]
     private Text _scoreText;
     [SerializeField]
     private Text _timerText;
     [SerializeField]
     private Text _aiCount;
-    private bool _quotaMet = false;
+
 
     private void Awake()
     {

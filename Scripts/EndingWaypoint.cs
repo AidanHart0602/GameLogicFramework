@@ -28,7 +28,7 @@ public class EndingWaypoint : MonoBehaviour
         if(_escapeCounter == 5)
         {
             UIManager.UIinstance.EndScene();
-            _spawnManager.EndSpawn();
+            //_spawnManager.EndSpawn();
         }
     }
 }
