@@ -21,7 +21,6 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
         private AudioClip _fire;
         [SerializeField]
         private AudioClip _ricochet;
-        private int _quotaVal = 90;
 
         [Header("Controller Info")]
         [SerializeField]
@@ -103,8 +102,6 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
                     Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
                     Debug.Log("Hit Robot");
                     UIManager.UIinstance.Score(_score);
-                    _quotaVal--;
-                    UIManager.UIinstance.QuotaCount(_quotaVal);
                     robot.InitiateDeath();
                 }
                 if (Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 6))

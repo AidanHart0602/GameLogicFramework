@@ -67,7 +67,7 @@ public class AI : MonoBehaviour
 
     public void InitiateDeath()
     {
-        _spawnManager.LowerNumbers();
+        _spawnManager.LowerNumber();
         _deathTrigger = true;
         _states = _aiStates.Dead;
     }
@@ -76,7 +76,7 @@ public class AI : MonoBehaviour
     {
         _anim.SetTrigger("Death");
         yield return new WaitForSeconds(3.21f);
-        this.transform.position = _endWaypoint.transform.position;
+        this.transform.position = _startWaypoint.transform.position; 
         this.gameObject.SetActive(false);
         _states = _aiStates.Running;
 

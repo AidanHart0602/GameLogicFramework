@@ -15,10 +15,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private float _timerCount = 300;
+    private float _timerCount = 600;
 
-    [SerializeField]
-    private Text _quotaText;
     [SerializeField]
     private Text _winningText;
     [SerializeField]
@@ -46,7 +44,6 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _scoreText.text = "Score: " + 0;
-        _quotaText.text = "Quota: " + 90;
     }
 
     void Update()
@@ -57,11 +54,20 @@ public class UIManager : MonoBehaviour
         }                     
         int IntTimer = Mathf.RoundToInt(_timerCount);
         _timerText.text = "Time: " + IntTimer;
+
+        if(_timerCount == 0)
+        {
+            EndScene();
+        }
     }
 
     public void RemainingBots(int BotNum)
     {
         _aiCount.text = "Robots: " + BotNum;
+        if(BotNum == 0)
+        {
+            _quotaMet = true;
+        }
     }
 
     public void Score(int ScoreValue)
@@ -70,14 +76,7 @@ public class UIManager : MonoBehaviour
         _gameOverScore = ScoreValue;
     }
 
-    public void QuotaCount(int QuotaNum)
-    {
-        _quotaText.text = "Quota: " + QuotaNum;
-        if(QuotaNum == 0)
-        {
-            _quotaMet = true;
-        }
-    }
+
 
     public void EndScene()
     {
@@ -88,15 +87,14 @@ public class UIManager : MonoBehaviour
         _aiCount.gameObject.SetActive(false);
         _timerText.gameObject.SetActive(false);
         _reticle.gameObject.SetActive(false);
-        _quotaText.gameObject.SetActive(false);
         if(_quotaMet == true)
         {
             _winningText.gameObject.SetActive(true);
         }
 
-        if(_quotaText == false)
+        if(_quotaMet == false)
         {
-            _winningText.text = "Failed to meet quota.";
+            _winningText.text = "Failed to destroy all bots.";
             _winningText.gameObject.SetActive(true);
         }
     }

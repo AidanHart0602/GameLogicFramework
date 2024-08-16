@@ -9544,7 +9544,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Robots:'
+  m_Text: 'Robots: 90'
 --- !u!222 &484063179
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15029,18 +15029,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 721040715}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec65d45abee8a104dbd833c03cddd6f4, type: 3}
+  m_Script: {fileID: 11500000, guid: d9993b796d06cdf4888549ce8827f7ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startingPoint: {fileID: 481599644}
-  _endingPoint: {fileID: 598689621}
   _aiPool: []
   _aiPrefab: {fileID: 3596907816590635212, guid: 0aac09066c41ee1498d1a683804898e0, type: 3}
   _aiContainer: {fileID: 1520259244}
-  _gameActive: 1
-  _numberOfEnemies: 0
-  _enemyLimit: 15
+  _startingPoint: {fileID: 481599644}
   _spawnedEnemies: 0
+  _numberOfEnemies: 0
 --- !u!4 &721040717
 Transform:
   m_ObjectHideFlags: 0
@@ -19403,7 +19400,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 883959750}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -19413,7 +19410,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 19, y: -133.32164}
+  m_AnchoredPosition: {x: 19.000061, y: -133.32164}
   m_SizeDelta: {x: 550.84, y: 135.6355}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &884499968
@@ -30809,86 +30806,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af65d779706b6482eb47ae86ce616206, type: 3}
---- !u!1 &1348841386
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1348841389}
-  - component: {fileID: 1348841388}
-  - component: {fileID: 1348841387}
-  m_Layer: 5
-  m_Name: Quota Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1348841387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348841386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 36
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: 'Quota: '
---- !u!222 &1348841388
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348841386}
-  m_CullTransparentMesh: 1
---- !u!224 &1348841389
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348841386}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1499911900}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 277, y: 120}
-  m_SizeDelta: {x: 201, y: 49}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &1350013495 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 25457142623534554971bf209f8976d3, type: 3}
@@ -34531,7 +34448,6 @@ RectTransform:
   - {fileID: 748659180}
   - {fileID: 970532274}
   - {fileID: 484063177}
-  - {fileID: 1348841389}
   - {fileID: 1311641268}
   - {fileID: 1068044408}
   - {fileID: 883959753}
@@ -34555,7 +34471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b608ce2005c05e24fabe3bc92d09d78f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _quotaText: {fileID: 1348841387}
   _winningText: {fileID: 883959751}
   _gameOverScoreText: {fileID: 1068044409}
   _gameOverText: {fileID: 1311641269}

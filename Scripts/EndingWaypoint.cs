@@ -21,14 +21,15 @@ public class EndingWaypoint : MonoBehaviour
     {
         if(other.tag == "Enemy")
         {
+            Debug.Log("Buzzer Played");
             _buzzer.Play();
             _escapeCounter++;
         }
 
-        if(_escapeCounter == 5)
+        if(_escapeCounter == 90)
         {
+            _spawnManager.LowerNumber();
             UIManager.UIinstance.EndScene();
-            //_spawnManager.EndSpawn();
         }
     }
 }
