@@ -3318,7 +3318,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f71a713f288a8429a8038ab22a3c92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _deathSound: {fileID: 7545366470954905254}
   _endWaypoint: {fileID: 0}
 --- !u!65 &-2175634084160475242
 BoxCollider:

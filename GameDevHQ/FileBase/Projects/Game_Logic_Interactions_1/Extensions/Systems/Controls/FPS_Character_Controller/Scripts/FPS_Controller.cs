@@ -111,6 +111,14 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
                     _audioSource.clip = _ricochet;
                     _audioSource.Play();
                 }
+
+                if(Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 8))
+                {
+                    Barrel barrel = _hitInfo.collider.GetComponent<Barrel>();
+                    Debug.Log("Hit an explosive barrel");
+                    barrel.ActivateExplosion();
+                }
+
                 StartCoroutine(Reload());
             }
 
