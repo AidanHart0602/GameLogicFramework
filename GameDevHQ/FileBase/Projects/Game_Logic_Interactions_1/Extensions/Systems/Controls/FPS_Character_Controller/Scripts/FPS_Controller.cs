@@ -119,6 +119,13 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
                     barrel.ActivateExplosion();
                 }
 
+                if(Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 9))
+                {
+                    Barrier barrier = _hitInfo.collider.GetComponent<Barrier>();
+                    Debug.Log("Disabled a barrier");
+                    barrier.BarrierDisabled();
+                }
+
                 StartCoroutine(Reload());
             }
 
