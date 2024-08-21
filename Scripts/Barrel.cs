@@ -6,11 +6,12 @@ public class Barrel : MonoBehaviour
 {
     [SerializeField]
     private GameObject _explosion;
-    [SerializeField]
-    public MeshRenderer _barrel;
-
+    private MeshRenderer _barrel;
+    private Collider _collider; 
     public void ActivateExplosion()
     {
+        _collider = GetComponent<Collider>();
+        _barrel = GetComponent<MeshRenderer>();
         Debug.Log("Spark activated");
         StartCoroutine(Spark());
     }
@@ -19,8 +20,14 @@ public class Barrel : MonoBehaviour
     {
         _explosion.SetActive(true);
         yield return new WaitForSeconds(1.0f);
-        _barrel.enabled = false;
-        yield return new WaitForSeconds(5);
-        Destroy(this);
+        ComponentActivater(false);
+        yield return new WaitForSeconds(35f);
+        Debug.Log("Finished Cooldown");
+        ComponentActivater(true);
+    }
+    private void ComponentActivater(bool trigger)
+    {
+        _barrel.enabled = trigger;
+        _collider.enabled = trigger;
     }
 }

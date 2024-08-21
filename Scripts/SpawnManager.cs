@@ -18,11 +18,19 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private int _numberOfEnemies;
     private bool _gameActive = true;
+    [SerializeField]
+    private GameObject _barrelPrefab;
+    [SerializeField]
+    private GameObject[] _barrelSpawns;
 
     void Start()
     {
         _storeAI(20);
         _numberOfEnemies = _enemyLimit;
+        foreach (var BarrelSpawn in _barrelSpawns)
+        {
+            Instantiate(_barrelPrefab, BarrelSpawn.transform);
+        }
         StartCoroutine(EnableAI());
     }
     List<GameObject> _storeAI(int NumOfAI)
