@@ -80,13 +80,14 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(3.0f);
         }
 
-        if(_spawnedEnemies == _enemyLimit && _numberOfEnemies == 0)
+        while(_gameActive == true)
         {
-            UIManager.UIinstance.EndScene();
-            StopSpawning();
+            if (_spawnedEnemies == _enemyLimit && _numberOfEnemies == 0)
+            {
+                UIManager.UIinstance.EndScene();
+                StopSpawning();
+            }
+            yield return null;
         }
-        
     }
-
-
 }

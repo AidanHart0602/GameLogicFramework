@@ -95,37 +95,77 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
 
                 RaycastHit _hitInfo;
                 Ray origin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-                if (Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 3))
+
+
+                if(Physics.Raycast(origin, out _hitInfo, Mathf.Infinity))
                 {
-                    _score = _score + 10;
-                    AI robot = _hitInfo.collider.GetComponent<AI>();
-                    Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
-                    Debug.Log("Hit Robot");
-                    UIManager.UIinstance.Score(_score);
-                    robot.InitiateDeath();
-                }
-                if (Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 6))
-                {
-                    Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
-                    Debug.Log("Hit Object");
-                    _audioSource.clip = _ricochet;
-                    _audioSource.Play();
+                    var layer = _hitInfo.transform.gameObject.layer;
+                    Debug.Log(layer);
+
+                    if(layer == 10)
+                    {
+                        Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
+                        Debug.Log("Hit Object");
+                        _audioSource.clip = _ricochet;
+                        _audioSource.Play();
+                    }
+                    else if (layer == 9)
+                    {
+                        Barrier barrier = _hitInfo.collider.GetComponent<Barrier>();
+                        Debug.Log("Disabled a barrier");
+                        _audioSource.clip = _ricochet;
+                        _audioSource.Play();
+                        barrier.BarrierDisabled();
+                    }
+                    else if (layer == 8)
+                    {
+                        Barrel barrel = _hitInfo.collider.GetComponent<Barrel>();
+                        Debug.Log("Hit an explosive barrel");
+                        barrel.ActivateExplosion();
+                    }
+                    else if (layer == 3)
+                    {
+                        _score = _score + 10;
+                        AI robot = _hitInfo.collider.GetComponent<AI>();
+                        Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
+                        Debug.Log("Hit Robot");
+                        UIManager.UIinstance.Score(_score);
+                        robot.InitiateDeath();
+                    }
                 }
 
-                if(Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 8))
-                {
-                    Barrel barrel = _hitInfo.collider.GetComponent<Barrel>();
-                    Debug.Log("Hit an explosive barrel");
-                    barrel.ActivateExplosion();
-                }
+                /* if (Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 6))
+                 {
+                     Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
+                     Debug.Log("Hit Object");
+                     _audioSource.clip = _ricochet;
+                     _audioSource.Play();
+                 }
 
-                if(Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 9))
-                {
-                    Barrier barrier = _hitInfo.collider.GetComponent<Barrier>();
-                    Debug.Log("Disabled a barrier");
-                    barrier.BarrierDisabled();
-                }
+                 if(Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 8))
+                 {
+                     Barrel barrel = _hitInfo.collider.GetComponent<Barrel>();
+                     Debug.Log("Hit an explosive barrel");
+                     barrel.ActivateExplosion();
+                 }
 
+                 if(Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 9))
+                 {
+                     Barrier barrier = _hitInfo.collider.GetComponent<Barrier>();
+                     Debug.Log("Disabled a barrier");
+                     barrier.BarrierDisabled();
+                 }
+
+                 else if(Physics.Raycast(origin, out _hitInfo, Mathf.Infinity, 1 << 3))
+                 {
+                     _score = _score + 10;
+                     AI robot = _hitInfo.collider.GetComponent<AI>();
+                     Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
+                     Debug.Log("Hit Robot");
+                     UIManager.UIinstance.Score(_score);
+                     robot.InitiateDeath();
+                 }
+                */
                 StartCoroutine(Reload());
             }
 

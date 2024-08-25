@@ -36,25 +36,25 @@ public class AI : MonoBehaviour
         _startWaypoint = GameObject.FindGameObjectWithTag("Starting Waypoint");
         _states = _aiStates.Running;
         _agent = GetComponent<NavMeshAgent>();
+        StateCheck();
         StartCoroutine(HidingCooldown());
     }
-    private void Update()
+    private void StateCheck()
     {
-
         switch (_states)
         {
             case _aiStates.Running:
-                    _agent.isStopped = false;
-                    _agent.destination = _endWaypoint.transform.position;
+                _agent.isStopped = false;
+                _agent.destination = _endWaypoint.transform.position;
                 break;
             case _aiStates.Hiding:
-                if(_hiding == true)
+                if (_hiding == true)
                 {
                     _agent.isStopped = true;
                 }
                 break;
             case _aiStates.Dead:
-                if(_deathTrigger == true)
+                if (_deathTrigger == true)
                 {
                     _deathSound.Play();
                     _agent.isStopped = true;
@@ -70,6 +70,14 @@ public class AI : MonoBehaviour
         _spawnManager.LowerNumber();
         _deathTrigger = true;
         _states = _aiStates.Dead;
+        StateCheck();
+    }
+
+    public void StartRunning()
+    {
+        gameObject.SetActive(true);
+        _agent.isStopped = false;
+        _agent.destination = _endWaypoint.transform.position;
     }
 
     private IEnumerator Death()
@@ -79,7 +87,6 @@ public class AI : MonoBehaviour
         this.transform.position = _startWaypoint.transform.position; 
         this.gameObject.SetActive(false);
         _states = _aiStates.Running;
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,7 +99,6 @@ public class AI : MonoBehaviour
 
         if(other.tag == "Hiding Spot")
         {
-            gameObject.layer = 7;
             if (_hidingCooldown == false)
             {
                 _hidingCooldown = true;
@@ -119,10 +125,12 @@ public class AI : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         _anim.SetTrigger("Hiding");
         _states = _aiStates.Hiding;
+        StateCheck();
         yield return new WaitForSeconds(randomTime);
         _hiding = false;
         _anim.ResetTrigger("Hiding");
         _states = _aiStates.Running;
+        StateCheck();
         StartCoroutine(HidingCooldown());  
     }
 }

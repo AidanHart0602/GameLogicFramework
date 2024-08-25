@@ -24,7 +24,7 @@ public class BarrelExplosion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 3 || other.gameObject.layer == 7)
+        if (other.gameObject.layer == 3)
         {
             AI robot = other.GetComponent<AI>();
             robot.InitiateDeath();
