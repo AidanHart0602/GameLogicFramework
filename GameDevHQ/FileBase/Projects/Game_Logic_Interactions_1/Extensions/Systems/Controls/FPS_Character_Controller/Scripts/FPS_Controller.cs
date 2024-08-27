@@ -101,15 +101,15 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
                 {
                     var layer = _hitInfo.transform.gameObject.layer;
                     Debug.Log(layer);
-
-                    if(layer == 10)
+                    
+                    if(layer == 10) //Wall
                     {
                         Instantiate(_sparks, _hitInfo.point, Quaternion.identity);
                         Debug.Log("Hit Object");
                         _audioSource.clip = _ricochet;
                         _audioSource.Play();
                     }
-                    else if (layer == 9)
+                    else if (layer == 9) //Barrier
                     {
                         Barrier barrier = _hitInfo.collider.GetComponent<Barrier>();
                         Debug.Log("Disabled a barrier");
@@ -117,13 +117,13 @@ namespace GameDevHQ.FileBase.Plugins.FPS_Character_Controller
                         _audioSource.Play();
                         barrier.BarrierDisabled();
                     }
-                    else if (layer == 8)
+                    else if (layer == 8) //Barrel
                     {
                         Barrel barrel = _hitInfo.collider.GetComponent<Barrel>();
                         Debug.Log("Hit an explosive barrel");
                         barrel.ActivateExplosion();
                     }
-                    else if (layer == 3)
+                    else if (layer == 3) //Robot
                     {
                         _score = _score + 10;
                         AI robot = _hitInfo.collider.GetComponent<AI>();
